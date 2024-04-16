@@ -332,47 +332,37 @@ void dbgPrintOpeningHours(OpeningHours *oh)
 	}
 }
 
+void dbgNextOpeningDate(char *timeStr)
+{
+	struct tm test_date;
+	struct tm next_opening;
+	char next_opening_str[20];
+	strptime(timeStr, "%Y-%m-%dT%H:%M:%S", &test_date);
+	next_opening = nextOpeningDate(&test_date);
+	strftime(next_opening_str, sizeof(next_opening_str), "%Y-%m-%dT%H:%M:%S", &next_opening);
+	printf("NextOpeningDate(\x1b[36;1m%s\x1b[0m %s) == \x1b[36;1m%s\x1b[0m %s\n", days[test_date.tm_wday], timeStr, days[next_opening.tm_wday], next_opening_str);
+}
+void dbgIsOpenOn(char *timeStr)
+{
+	struct tm test_date;
+	strptime(timeStr, "%Y-%m-%dT%H:%M:%S", &test_date);
+	printf("IsOpenOn(\x1b[36;1m%s\x1b[0m %s) == %s\n", days[test_date.tm_wday], timeStr, isOpenOn(&test_date) ? "\x1b[32mtrue\x1b[0m" : "\x1b[31mfalse\x1b[0m");
+}
+
 int main(int argc, char **argv)
 {
 	if (argc != 2)
 		exitError("main: Please pass a config file in argument");
-	
-	struct tm next_opening;
-	char next_opening_str[20];
-	struct tm test_date;
-	
 	// Initialisation des heures d'ouverture
 	initializeOpeningHours();
-
 	readInputFile(argv[1]);
-	
 	printf("[Validation] Base\n");
-	strptime("2024-02-21T07:45:00", "%Y-%m-%dT%H:%M:%S", &test_date);
-	printf("IsOpenOn(\x1b[36;1m%s\x1b[0m %s) == %s\n", days[test_date.tm_wday], "2024-02-21T07:45:00", isOpenOn(&test_date) ? "\x1b[32mtrue\x1b[0m" : "\x1b[31mfalse\x1b[0m");
-	
-	strptime("2024-02-22T12:22:11", "%Y-%m-%dT%H:%M:%S", &test_date);
-	printf("IsOpenOn(\x1b[36;1m%s\x1b[0m %s) == %s\n", days[test_date.tm_wday], "2024-02-22T12:22:11", isOpenOn(&test_date) ? "\x1b[32mtrue\x1b[0m" : "\x1b[31mfalse\x1b[0m");
-	
-	strptime("2024-02-25T09:15:00", "%Y-%m-%dT%H:%M:%S", &test_date);
-	printf("IsOpenOn(\x1b[36;1m%s\x1b[0m %s) == %s\n", days[test_date.tm_wday], "2024-02-25T09:15:00", isOpenOn(&test_date) ? "\x1b[32mtrue\x1b[0m" : "\x1b[31mfalse\x1b[0m");
-
-	
-
-	strptime("2024-02-22T14:00:00", "%Y-%m-%dT%H:%M:%S", &test_date);
-	next_opening = nextOpeningDate(&test_date);
-	strftime(next_opening_str, sizeof(next_opening_str), "%Y-%m-%dT%H:%M:%S", &next_opening);
-	printf("NextOpeningDate(\x1b[36;1m%s\x1b[0m %s) == \x1b[36;1m%s\x1b[0m %s\n", days[test_date.tm_wday], "2024-02-22T14:00:00", days[next_opening.tm_wday], next_opening_str);
-	
-	strptime("2024-02-24T09:15:00", "%Y-%m-%dT%H:%M:%S", &test_date);
-	next_opening = nextOpeningDate(&test_date);
-	strftime(next_opening_str, sizeof(next_opening_str), "%Y-%m-%dT%H:%M:%S", &next_opening);
-	printf("NextOpeningDate(\x1b[36;1m%s\x1b[0m %s) == \x1b[36;1m%s\x1b[0m %s\n", days[test_date.tm_wday], "2024-02-24T09:15:00", days[next_opening.tm_wday], next_opening_str);
-	
-	strptime("2024-02-22T12:22:11", "%Y-%m-%dT%H:%M:%S", &test_date);
-	next_opening = nextOpeningDate( &test_date);
-	strftime(next_opening_str, sizeof(next_opening_str), "%Y-%m-%dT%H:%M:%S", &next_opening);
-	printf("NextOpeningDate(\x1b[36;1m%s\x1b[0m %s) == \x1b[36;1m%s\x1b[0m %s\n", days[test_date.tm_wday], "2024-02-22T12:22:11", days[next_opening.tm_wday], next_opening_str);
-	
+	dbgIsOpenOn("2024-02-21T07:45:00");
+	dbgIsOpenOn("2024-02-22T12:22:11");
+	dbgIsOpenOn("2024-02-25T09:15:00");
+	dbgNextOpeningDate("2024-02-22T14:00:00");
+	dbgNextOpeningDate("2024-02-24T09:15:00");
+	dbgNextOpeningDate("2024-02-22T12:22:11");
 	printf("[Validation] Extension\n");
 	printf("Avant manipulations\n");
 	dbgPrintOpeningHours(&opening_hours);
@@ -382,25 +372,15 @@ int main(int argc, char **argv)
 	SetOpeningHours("Sun", "09:00", "13:00");
 	printf("Apres manipulations\n");
 	dbgPrintOpeningHours(&opening_hours);
-	
 	//le premier test de validation dans le README demande de tester la date "monday" 2024-02-25T10:20:00.
 	//cette date correspond a un dimanche donc le resultat est true, contrairement au readme qui dit false.
-	strptime("2024-02-25T10:20:00", "%Y-%m-%dT%H:%M:%S", &test_date);
-	printf("IsOpenOn(\x1b[36;1m%s\x1b[0m %s) == %s\n", days[test_date.tm_wday], "2024-02-25T10:20:00", isOpenOn(&test_date) ? "\x1b[32mtrue\x1b[0m" : "\x1b[31mfalse\x1b[0m");
-	
-	strptime("2024-02-21T07:45:00", "%Y-%m-%dT%H:%M:%S", &test_date);
-	printf("IsOpenOn(\x1b[36;1m%s\x1b[0m %s) == %s\n", days[test_date.tm_wday], "2024-02-21T07:45:00", isOpenOn(&test_date) ? "\x1b[32mtrue\x1b[0m" : "\x1b[31mfalse\x1b[0m");
+	dbgIsOpenOn("2024-02-25T10:20:00");
+	dbgIsOpenOn("2024-02-21T07:45:00");
 	//une fois de plus le README a des erreurs sur cette ligne, IsOpenON thursday, mais la date thurday n'est
 	//pas definie dans le readme. J'ai donc utilise la date saturday.
-	strptime("2024-02-24T19:50:00", "%Y-%m-%dT%H:%M:%S", &test_date);
-	printf("IsOpenOn(\x1b[36;1m%s\x1b[0m %s) == %s\n", days[test_date.tm_wday], "2024-02-24T19:50:00", isOpenOn(&test_date) ? "\x1b[32mtrue\x1b[0m" : "\x1b[31mfalse\x1b[0m");
-	
-	strptime("2024-02-25T09:15:00", "%Y-%m-%dT%H:%M:%S", &test_date);
-	printf("IsOpenOn(\x1b[36;1m%s\x1b[0m %s) == %s\n", days[test_date.tm_wday], "2024-02-25T09:15:00", isOpenOn(&test_date) ? "\x1b[32mtrue\x1b[0m" : "\x1b[31mfalse\x1b[0m");
-
+	dbgIsOpenOn("2024-02-24T19:50:00");
+	dbgIsOpenOn("2024-02-25T09:15:00");
 	//Je teste ici une date posee un lundi, pour verifier que la fermeture du lundi fonctionne
-
-	strptime("2024-02-19T10:20:00", "%Y-%m-%dT%H:%M:%S", &test_date);
-	printf("IsOpenOn(\x1b[36;1m%s\x1b[0m %s) == %s\n", days[test_date.tm_wday], "2024-02-19T10:20:00", isOpenOn(&test_date) ? "\x1b[32mtrue\x1b[0m" : "\x1b[31mfalse\x1b[0m");
+	dbgIsOpenOn("2024-02-19T10:20:00");
 	return 0;
 }
