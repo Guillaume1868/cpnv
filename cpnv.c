@@ -26,7 +26,6 @@ typedef struct
 } OpeningHours;
 
 const char *days[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-
 OpeningHours opening_hours;
 
 void exitError(char *str)
@@ -168,10 +167,8 @@ void setOpeningHours(char *day, char *opening_time, char *closing_time)
 	{
 		if (sscanf(opening_time, "%d:%d", &open.tm_hour, &open.tm_min) != 2)
 			exitError("setOpeningHours: invalid format");
-		;
 		if (sscanf(closing_time, "%d:%d", &close.tm_hour, &close.tm_min) != 2)
 			exitError("setOpeningHours: invalid format");
-		;
 	}
 	else
 		exitError("setOpeningHours: invalid format");
