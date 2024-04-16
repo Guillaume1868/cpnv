@@ -1,0 +1,3 @@
+Mon, Wed, Fri from 08:00 to 16:00
+Tue, Thu, Sat from 08:00 to 12:00
+Tue, Thu from 14:00 to 18:00

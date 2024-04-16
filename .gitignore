@@ -1,2 +1,3 @@
-/a.out
-/cpnv
+*.o
+cpnv
+a.out
