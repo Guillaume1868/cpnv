@@ -1,7 +1,7 @@
 # Exercice pour entretien au CPNV
 Ce projet est un exercice réalisé dans le but de postuler au CPNV.
 
-La consigne de l'exercice est disponible [ici](https://github.com/CPNV-ES/2024_Code_Entretien/blob/41d27963550db367c4c29895c907d96b3fd22059/README.md).
+La consigne de l'exercice est disponible [ici](https://github.com/CPNV-ES/2024_Code_Entretien/blob/fea35d969d2145978ef183d7bcbf7cf97577fd9a/README.md).
 
 ## How to use
 

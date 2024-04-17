@@ -372,15 +372,9 @@ int main(int argc, char **argv)
 	SetOpeningHours("Sun", "09:00", "13:00");
 	printf("Apres manipulations\n");
 	dbgPrintOpeningHours(&opening_hours);
-	//le premier test de validation dans le README demande de tester la date "monday" 2024-02-25T10:20:00.
-	//cette date correspond a un dimanche donc le resultat est true, contrairement au readme qui dit false.
-	dbgIsOpenOn("2024-02-25T10:20:00");
+	dbgIsOpenOn("2024-02-26T10:20:00");
 	dbgIsOpenOn("2024-02-21T07:45:00");
-	//une fois de plus le README a des erreurs sur cette ligne, IsOpenON thursday, mais la date thurday n'est
-	//pas definie dans le readme. J'ai donc utilise la date saturday.
 	dbgIsOpenOn("2024-02-24T19:50:00");
 	dbgIsOpenOn("2024-02-25T09:15:00");
-	//Je teste ici une date posee un lundi, pour verifier que la fermeture du lundi fonctionne
-	dbgIsOpenOn("2024-02-19T10:20:00");
 	return 0;
 }
