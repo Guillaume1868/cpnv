@@ -145,10 +145,10 @@ void addOpeningHours(char *day, char *opening_time, char *closing_time)
 		if (sscanf(closing_time, "%d:%d", &close.tm_hour, &close.tm_min) != 2)
 			exitError("setOpeningHours: invalid format");
 		;
+		addOpeningHoursTS(day, open, close);
 	}
 	else
 		exitError("setOpeningHours: invalid format");
-	addOpeningHoursTS(day, open, close);
 }
 
 
@@ -162,6 +162,7 @@ void setOpeningHours(char *day, char *opening_time, char *closing_time)
 		open.tm_min = -1;
 		close.tm_hour = -1;
 		close.tm_min = -1;
+		setOpeningHoursTS(day, open, close);
 	}
 	else if (*opening_time != '\0' && *closing_time != '\0')
 	{
@@ -169,10 +170,10 @@ void setOpeningHours(char *day, char *opening_time, char *closing_time)
 			exitError("setOpeningHours: invalid format");
 		if (sscanf(closing_time, "%d:%d", &close.tm_hour, &close.tm_min) != 2)
 			exitError("setOpeningHours: invalid format");
+		setOpeningHoursTS(day, open, close);
 	}
 	else
 		exitError("setOpeningHours: invalid format");
-	setOpeningHoursTS(day, open, close);
 }
 void SetOpeningHours(char *day, char *opening_time, char *closing_time)
 {
